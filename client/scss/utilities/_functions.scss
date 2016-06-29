@@ -1,0 +1,14 @@
+//---------------------------
+//
+// Functions
+//
+//---------------------------
+
+@function size($key) {
+	@if map-has-key($size, $key) {
+		@return map-get($size, $key);
+	}
+
+	@warn "Unknown `#{$key}` in $size.";
+	@return null;
+}

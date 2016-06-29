@@ -1,0 +1,6 @@
+export const DRAGGABLE_SHIP = 'DRAGGABLE_SHIP';
+export const AIRCRAFT_CARRIER = 'AIRCRAFT_CARRIER';
+export const BATTLESHIP = 'BATTLESHIP';
+export const CRUISER = 'CRUISER';
+export const DESTROYER = 'DESTROYER';
+export const SUBMARINE = 'SUBMARINE';

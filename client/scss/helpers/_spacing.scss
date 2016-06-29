@@ -1,0 +1,92 @@
+//---------------------------
+//
+// Margin helpers
+//
+//---------------------------
+
+$spacing-unit: 16px;
+
+$sizes: (
+	'xxs': .25,
+	'xs': .5,
+	's': 1,
+	'm': 1.5,
+	'l': 2,
+	'xl': 4,
+	'xxl': 6,
+	'jumbo': 8
+);
+
+.u-mar-trim {
+	margin: 0 !important;
+}
+
+.u-pad-trim {
+	padding: 0 !important;
+}
+
+@each $size, $scale in $sizes {
+
+	/* Margins */
+	.u-mar-#{$size} {
+		margin: round($spacing-unit * $scale) !important;
+	}
+
+	.u-mar-top-#{$size} {
+		margin-top: round($spacing-unit * $scale) !important;
+	}
+
+	.u-mar-right-#{$size} {
+		margin-right: round($spacing-unit * $scale) !important;
+	}
+
+	.u-mar-bottom-#{$size} {
+		margin-bottom: round($spacing-unit * $scale) !important;
+	}
+
+	.u-mar-left-#{$size} {
+		margin-left: round($spacing-unit * $scale) !important;
+	}
+
+	.u-mar-horizontal-#{$size} {
+		margin-left: round($spacing-unit * $scale) !important;
+		margin-right: round($spacing-unit * $scale) !important;
+	}
+	
+	.u-mar-vertical-#{$size} {
+		margin-top: round($spacing-unit * $scale) !important;
+		margin-bottom: round($spacing-unit * $scale) !important;
+	}
+
+	/* Paddings */
+	.u-pad-#{$size} {
+		padding: round($spacing-unit * $scale) !important;
+	}
+
+	.u-pad-top-#{$size} {
+		padding-top: round($spacing-unit * $scale) !important;
+	}
+
+	.u-pad-right-#{$size} {
+		padding-right: round($spacing-unit * $scale) !important;
+	}
+
+	.u-pad-bottom-#{$size} {
+		padding-bottom: round($spacing-unit * $scale) !important;
+	}
+
+	.u-pad-left-#{$size} {
+		padding-left: round($spacing-unit * $scale) !important;
+	}
+
+	.u-pad-horizontal-#{$size} {
+		padding-left: round($spacing-unit * $scale) !important;
+		padding-right: round($spacing-unit * $scale) !important;
+	}
+
+	.u-pad-vertical-#{$size} {
+		padding-top: round($spacing-unit * $scale) !important;
+		padding-bottom: round($spacing-unit * $scale) !important;
+	}
+
+}

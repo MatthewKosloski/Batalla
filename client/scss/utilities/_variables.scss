@@ -1,0 +1,23 @@
+//---------------------------
+//
+// Variables
+//
+//---------------------------
+
+/* colors */
+$white: #fff;
+
+/* units */
+$em-base: 16px;
+$wrapWidth: rem(960);
+$baseline: 1.5rem;
+
+/* breakpoints */
+$breakpoint-large: rem(1000);
+$breakpoint-medium: rem(768);
+$breakpoint-small: rem(500);
+
+/* grid */
+$grid-gutter-width: 20px !default;
+$grid-pushes: false !default;
+$grid-pulls: false !default;

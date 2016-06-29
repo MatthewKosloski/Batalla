@@ -1,0 +1,86 @@
+body {
+	padding: 10px;
+}
+
+.board {
+	@include display(flex);
+	@include flex-wrap(wrap);
+	border-top: 1px solid black;
+	border-right: 1px solid black;
+	width: 500px;
+	height: 500px;
+	position: relative;
+}
+
+.board__square {
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(center);
+	width: 10%;
+	height: 10%;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	z-index: 1;
+}
+
+.board__ship {
+	@include display(flex);
+	position: absolute;
+	box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 1);
+	span {
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+	span.hit {
+		background-color: rgba(255, 0, 0, 0.50);
+	}
+	z-index: 2;
+}
+
+.horizontal {
+	@include flex-direction(row);
+}
+
+.vertical {
+	@include flex-direction(column);
+}
+
+.board__square.hit {
+	background-color: rgba(255, 255, 0, 0.50);
+}
+
+// .aircraft-carrier {
+//   width: 50%;
+//   height: 10%;
+//   top: 0%;
+//   left: 0%
+// }
+
+// .battleship {
+//   width: 10%;
+//   height: 40%;
+//   top: 40%;
+//   left: 60%
+// }
+
+// .cruiser {
+//   width: 30%;
+//   height: 10%;
+//   top: 20%;
+//   left: 50%
+// }
+
+// .destroyer {
+//   width: 10%;
+//   height: 20%;
+//   top: 80%;
+//   left: 0%
+// }
+
+// .submarine {
+//   width: 10%;
+//   height: 10%;
+//   top: 60%;
+//   left: 30%
+// }
