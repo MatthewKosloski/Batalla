@@ -28,3 +28,18 @@ export const getXCoordinates = (crds) => {
 export const getYCoordinates = (crds) => {
 	return crds.map((crd) => crd[1]);
 }
+
+export const areValidCoordinates = (crds) => {
+	// array of x and y coordinates
+	let x = crds.map((crd) => crd[0]);
+	let y = crds.map((crd) => crd[1]);
+	/*
+		boolean values.  Maps over Xs and Ys and creates an array of booleans.  
+		True if matches condition, else false.  Checks whether 
+		there are and truthy values 
+	*/
+	let invalidX = x.map((x) => x < 0 || x > 9).indexOf(true) !== -1;
+	let invalidY = y.map((y) => y < 0 || y > 9).indexOf(true) !== -1;
+	// if either an x or y coorinate is invalid, return false (areCoordinatesValid? false.)
+	return invalidX || invalidY ? false : true;
+}

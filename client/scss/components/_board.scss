@@ -27,6 +27,7 @@ body {
 	@include display(flex);
 	position: absolute;
 	box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 1);
+	cursor: move;
 	span {
 		width: 100%;
 		height: 100%;
@@ -50,37 +51,24 @@ body {
 	background-color: rgba(255, 255, 0, 0.50);
 }
 
-// .aircraft-carrier {
-//   width: 50%;
-//   height: 10%;
-//   top: 0%;
-//   left: 0%
-// }
+.ships-container {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
 
-// .battleship {
-//   width: 10%;
-//   height: 40%;
-//   top: 40%;
-//   left: 60%
-// }
+.squares-container {
+	@include display(flex);
+	@include flex-wrap(wrap);
+	width: 100%;
+	height: 100%;
+}
 
-// .cruiser {
-//   width: 30%;
-//   height: 10%;
-//   top: 20%;
-//   left: 50%
-// }
+.is-over {
+	background-color: rgba(255, 255, 0, 0.33);
+}
 
-// .destroyer {
-//   width: 10%;
-//   height: 20%;
-//   top: 80%;
-//   left: 0%
-// }
-
-// .submarine {
-//   width: 10%;
-//   height: 10%;
-//   top: 60%;
-//   left: 30%
-// }
+.can-drop {
+	background-color: rgba(0, 255, 0, 0.33);
+}

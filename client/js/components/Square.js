@@ -1,8 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 import {DRAGGABLE_SHIP} from '../constants/ships';
+import {haveSamePair} from '../helpers';
 import {DropTarget} from 'react-dnd';
 
 const squareTarget = {
+	canDrop(props) {
+		return props.isBusy ? false : true;
+	},
 	drop(props) {
 		const {x, y} = props;
 		return {
@@ -15,27 +19,29 @@ const squareTarget = {
 function collect(connect, monitor) {
 	return {
 		connectDropTarget: connect.dropTarget(),
-		isOver: monitor.isOver()
+		isOver: monitor.isOver(),
+		canDrop: monitor.canDrop()
 	};
 }
 
 class Square extends Component {
 	render() {
-
-		const {hit, isBusy, onSquareHover, connectDropTarget, isOver} = this.props;
+		const {x, y, onSquareHover, connectDropTarget, isBusy, isOver, canDrop} = this.props;
 		let className = 'board__square';
-		if(hit) {
-			className+= ` ${'hit'}`;
-		}
-		if(isBusy) {
-			className+= ` ${'isBusy'}`;
-		}
-
-		return connectDropTarget(
-			<div className={className} onMouseOver={onSquareHover}>
-			</div>
-		);
+		let style = {};
+		if(isOver) style.fontSize = '27px';
+		if(isOver && !canDrop) style.backgroundColor = 'rgba(255, 0, 0, 0.33)';
+		if(!isOver && canDrop) style.backgroundColor = 'rgba(255, 255, 0, 0.33)';
+		if(isOver && canDrop) style.backgroundColor = 'rgba(0, 255, 0, 0.33)';
+		return connectDropTarget(<div className={className} onMouseOver={onSquareHover} style={style}>{x}, {y}</div>);
 	}
+}
+
+Square.propTypes = {
+	x: PropTypes.number.isRequired,
+	y: PropTypes.number.isRequired,
+	isBusy: PropTypes.bool.isRequired,
+	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired
 }
 
 export default DropTarget(DRAGGABLE_SHIP, squareTarget, collect)(Square);

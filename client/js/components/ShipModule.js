@@ -1,13 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 
-function ShipModule({x, y, onShipHover, hit}) {
-	return <span className={hit ? 'hit' : ''} onMouseOver={onShipHover.bind(null, x, y)}></span>;
+function ShipModule({x, y, onShipMouseDown, hit}) {
+	return <span className={hit ? 'hit' : ''} onMouseDown={onShipMouseDown.bind(null, x, y)}></span>;
 }
 
 ShipModule.PropTypes = {
 	x: PropTypes.number.isRequired,
 	y: PropTypes.number.isRequired,
-	onShipHover: PropTypes.func.isRequired,
+	onShipMouseDown: PropTypes.func.isRequired,
 	hit: PropTypes.bool
 }
 
