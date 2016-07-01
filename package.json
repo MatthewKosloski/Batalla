@@ -40,6 +40,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server",
+    "webpack": "webpack --progress --watch",
     "build": "NODE_ENV=production webpack"
   },
   "author": "",

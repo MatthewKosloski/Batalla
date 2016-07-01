@@ -1,6 +1,6 @@
-# webpack-server
+# Batalla
 
-This is a simple boilerplate for static sites, React projects, and using ES6.  It uses Gulp for HTML and CSS compilation, and Webpack for JavaScript minification and bundling.
+A battleship game built with React and Socketio.
 
 ## Setup
 
@@ -19,9 +19,14 @@ This is a simple boilerplate for static sites, React projects, and using ES6.  I
     $ gulp
   ```
   
-4. Run webpack-dev-server.
+4. Run the server.
   ```js
     $ npm start
+  ```
+
+5. Run Webpack (in new tab).
+  ```js
+    $ npm run webpack
   ```
 
 ## Production
