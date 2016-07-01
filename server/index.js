@@ -22,3 +22,5 @@ server.listen(port, function(error) {
 		console.info('==> 🌎  Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
 	}
 });
+
+require('./events')(io);

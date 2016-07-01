@@ -28,12 +28,9 @@ class Square extends Component {
 	render() {
 		const {x, y, onSquareHover, connectDropTarget, isBusy, isOver, canDrop} = this.props;
 		let className = 'board__square';
-		let style = {};
-		if(isOver) style.fontSize = '27px';
-		if(isOver && !canDrop) style.backgroundColor = 'rgba(255, 0, 0, 0.33)';
-		if(!isOver && canDrop) style.backgroundColor = 'rgba(255, 255, 0, 0.33)';
-		if(isOver && canDrop) style.backgroundColor = 'rgba(0, 255, 0, 0.33)';
-		return connectDropTarget(<div className={className} onMouseOver={onSquareHover} style={style}>{x}, {y}</div>);
+		let backgroundColor;
+		if(isOver && canDrop) backgroundColor = 'rgba(0, 255, 0, 0.33)';
+		return connectDropTarget(<div className={className} onMouseOver={onSquareHover} style={{backgroundColor}}>{x}, {y}</div>);
 	}
 }
 

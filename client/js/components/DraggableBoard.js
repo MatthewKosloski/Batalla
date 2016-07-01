@@ -2,8 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {DragDropContext} from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import {addShips} from '../actions';
-import ShipsContainer from './ShipsContainer';
-import SquaresContainer from './SquaresContainer';
+import ShipsContainer from '../containers/ShipsContainer';
+import SquaresContainer from '../containers/SquaresContainer';
 import initialShips from '../data/initialShips';
 
 class Board extends Component {

@@ -3,8 +3,16 @@ import {
 	ADD_SHIPS, 
 	UPDATE_BUSY_SQUARES, 
 	CHANGE_ORIENTATION, 
-	SET_DRAG_ORIGIN
+	SET_DRAG_ORIGIN,
+	DISABLE_GAME
 } from '../constants/actionTypes';
+
+export function disableGame() {
+	return {
+		type: DISABLE_GAME
+	}
+}
+
 
 export function setDragOrigin(type, dragOrigin) {
 	return {
