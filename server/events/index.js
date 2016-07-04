@@ -6,14 +6,16 @@ var RECEIVE_GAME_ID = socketEvents.RECEIVE_GAME_ID,
 	DISABLE_GAME = socketEvents.DISABLE_GAME,
 	JOIN_GAME = socketEvents.JOIN_GAME,
 	MESSAGE_FROM_SERVER = socketEvents.MESSAGE_FROM_SERVER,
+	OPPONENT_LEFT = socketEvents.OPPONENT_LEFT,
+	OPPONENT_JOINED = socketEvents.OPPONENT_JOINED,
+	CONNECTION = 'connection',
 	DISCONNECT = 'disconnect';
 
 module.exports = function(io){
-	io.on('connection', function (socket) {
+	io.on(CONNECTION, function (socket) {
 	
 		socket.on(REQUEST_GAME_ID, requestGameId);
 		socket.on(JOIN_GAME, joinGame);
-		socket.on(DISCONNECT, disconnect);
 
 		function _generateString() { 
 			return randomstring.generate({length: 4, readable: true});
@@ -33,19 +35,21 @@ module.exports = function(io){
 
 		function joinGame(gameId) {
 			var clients = io.sockets.adapter.rooms[gameId];
-			if(clients === undefined || clients.length < 2) {
+			var gameIsNotInProgress = clients === undefined || clients.length < 2;
+			if(gameIsNotInProgress) {
 				socket.join(gameId);
-				console.log(socket.id + ' joined ' + gameId);
-				socket.emit(MESSAGE_FROM_SERVER, {data: 'You are connected.'});
+				socket.broadcast.emit(OPPONENT_JOINED);
 			} else {
 				socket.emit(DISABLE_GAME);
 				socket.leave(gameId);
-				console.log(socket.id + ' was removed from ' + gameId);
 			}
-		}
-
-		function disconnect() {
-			console.log(socket.id + ' disconnected');
+			socket.on(DISCONNECT, function(){
+				if(clients !== undefined) {
+					if(clients.length === 1) {
+						socket.broadcast.emit(OPPONENT_LEFT);
+					}
+				}
+			});
 		}
 	});
 }

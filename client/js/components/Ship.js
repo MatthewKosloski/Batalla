@@ -11,7 +11,7 @@ const shipSource = {
 		return {dragOrigin, coordinates, type};
 	},
 	endDrag(props, monitor) {
-		const {dispatch, busySquares, getShipsByType} = props;
+		const {dispatch, busySquares, getShipsByType, canDragShips} = props;
 		const draggedShip = monitor.getItem();
 		const {dragOrigin, coordinates, type} = draggedShip;
 		const [dragOriginX, dragOriginY] = dragOrigin;
@@ -31,7 +31,7 @@ const shipSource = {
 				return [Math.abs(x), Math.abs(y)];
 			});
 			const busySquaresExcludingShip = arraySplicer(busySquares, getShipsByType([type])[0].coordinates);
-			const canPlace = !haveSamePair(newCoordinates, busySquaresExcludingShip) && areValidCoordinates(newCoordinates);
+			const canPlace = !haveSamePair(newCoordinates, busySquaresExcludingShip) && areValidCoordinates(newCoordinates) && canDragShips;
 			dispatch(placeShip(type, newCoordinates, canPlace));
 		}
 	}
@@ -87,7 +87,8 @@ Ship.propTypes = {
 	connectDragSource: PropTypes.func.isRequired,
 	busySquares: PropTypes.arrayOf(PropTypes.array.isRequired).isRequired,
 	isDragging: PropTypes.bool.isRequired,
-	getShipsByType: PropTypes.func.isRequired
+	getShipsByType: PropTypes.func.isRequired,
+	canDragShips: PropTypes.bool.isRequired
 };
 
 export default DragSource(DRAGGABLE_SHIP, shipSource, collect)(Ship);

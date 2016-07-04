@@ -4,8 +4,30 @@ import {
 	UPDATE_BUSY_SQUARES, 
 	CHANGE_ORIENTATION, 
 	SET_DRAG_ORIGIN,
-	DISABLE_GAME
+	DISABLE_GAME,
+	DISABLE_DRAGGING,
+	OPPONENT_ARRIVED,
+	OPPONENT_DEPARTED,
+	OPPONENT_READY
 } from '../constants/actionTypes';
+
+export function opponentArrived() {
+	return {
+		type: OPPONENT_ARRIVED
+	}
+}
+
+export function opponentDeparted() {
+	return {
+		type: OPPONENT_DEPARTED
+	}
+}
+
+export function disableDragging() {
+	return {
+		type: DISABLE_DRAGGING
+	}
+}
 
 export function disableGame() {
 	return {

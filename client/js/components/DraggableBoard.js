@@ -6,7 +6,7 @@ import ShipsContainer from '../containers/ShipsContainer';
 import SquaresContainer from '../containers/SquaresContainer';
 import initialShips from '../data/initialShips';
 
-class Board extends Component {
+class DraggableBoard extends Component {
 
 	constructor() {
 		super();
@@ -19,21 +19,35 @@ class Board extends Component {
 	}
 
 	render() {
-		const {ships, busySquares, dispatch} = this.props;
+		const {
+			ships, 
+			busySquares, 
+			canDragShips, 
+			dispatch
+		} = this.props;
 		return (
-			<div className="board">
+			<div className="board board--draggable">
 				<ShipsContainer 
 					ships={ships}
 					busySquares={busySquares}
-					dispatch={dispatch} 
+					dispatch={dispatch}
+					canDragShips={canDragShips} 
 				/>
 				<SquaresContainer
-					ships={ships}
 					busySquares={busySquares}
+					isDropTarget={true}
+					canDragShips={canDragShips}
 				/>
 			</div>
 		);
 	}
 }
 
-export default DragDropContext(HTML5Backend)(Board);
+DraggableBoard.propTypes = {
+	ships: PropTypes.arrayOf(PropTypes.object).isRequired,
+	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired,
+	dispatch: PropTypes.func.isRequired,
+	canDragShips: PropTypes.bool.isRequired
+}
+
+export default DragDropContext(HTML5Backend)(DraggableBoard);

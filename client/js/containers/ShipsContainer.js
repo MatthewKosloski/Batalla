@@ -17,7 +17,7 @@ class ShipsContainer extends Component {
 	}
 
 	renderShip(ship, index) {
-		const {dispatch, busySquares} = this.props;
+		const {dispatch, busySquares, canDragShips} = this.props;
 		const {type, coordinates, orientation} = ship;
 		const {length} = coordinates;
 		const isHorizontal = orientation === 'horizontal';
@@ -41,18 +41,19 @@ class ShipsContainer extends Component {
 				onShipMouseDown={this.handleShipMouseDown.bind(this, type)}
 				busySquares={busySquares} 
 				getShipsByType={this.getShipsByType}
+				canDragShips={canDragShips}
 				{...ship}
 			/>
 		);
 	}
 
 	handleShipClick(type, isHorizontal, coordinates) {
-		const {dispatch, busySquares} = this.props;
+		const {dispatch, busySquares, canDragShips} = this.props;
 		const [pivotX, pivotY] = coordinates[0];
 		const busySquaresExcludingPivot = arraySplicer(busySquares, [[pivotX, pivotY]]);
 		const newCoordinates = isHorizontal ? coordinates.map((pair, i) => [pivotX, pair[1] + i]) : coordinates.map((pair, i) => [pair[0] + i, pivotY]);
 		const newOrientation = isHorizontal ? 'vertical' : 'horizontal';
-		const canChangeOrientation = !haveSamePair(newCoordinates, busySquaresExcludingPivot) && areValidCoordinates(newCoordinates);
+		const canChangeOrientation = !haveSamePair(newCoordinates, busySquaresExcludingPivot) && areValidCoordinates(newCoordinates) && canDragShips;
 		dispatch(changeOrientation(type, newOrientation, newCoordinates, canChangeOrientation));
 	}
 
@@ -79,6 +80,7 @@ class ShipsContainer extends Component {
 ShipsContainer.propTypes = {
 	ships: PropTypes.arrayOf(PropTypes.object).isRequired,
 	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired,
+	canDragShips: PropTypes.bool.isRequired,
 	dispatch: PropTypes.func.isRequired
 }
 

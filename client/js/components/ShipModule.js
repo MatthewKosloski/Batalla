@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
 
 function ShipModule({x, y, onShipMouseDown, hit}) {
 	return <span className={hit ? 'hit' : ''} onMouseDown={onShipMouseDown.bind(null, x, y)}></span>;

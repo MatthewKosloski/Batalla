@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import Square from '../components/Square';
+import DropTargetSquare from '../components/DropTargetSquare';
+import ClickableSquare from '../components/ClickableSquare';
 import {haveSamePair} from '../helpers';
 
 class SquaresContainer extends Component {
@@ -10,18 +11,29 @@ class SquaresContainer extends Component {
 	}
 
 	renderSquare(i) {
-		const {ships, busySquares} = this.props;
+		const {isDropTarget, busySquares, onSquareClick, canDragShips} = this.props;
 		const x = i % 10;
 		const y = Math.floor(i / 10);
 		const isBusy = haveSamePair([[x, y]], busySquares);
 		return (
-			<Square 
-				key={i} 
-				x={x} 
-				y={y} 
-				isBusy={isBusy}
-				busySquares={busySquares}
-			/>
+			isDropTarget ? 
+				<DropTargetSquare 
+					key={i} 
+					x={x} 
+					y={y} 
+					isBusy={isBusy}
+					busySquares={busySquares}
+					canDragShips={canDragShips}
+				/>
+			:
+				<ClickableSquare 
+					key={i}
+					x={x}
+					y={y}
+					isBusy={isBusy}
+					onSquareClick={onSquareClick}
+					busySquares={busySquares}
+				/>
 		);
 	}
 
@@ -40,8 +52,10 @@ class SquaresContainer extends Component {
 }
 
 SquaresContainer.propTypes = {
-	ships: PropTypes.arrayOf(PropTypes.object).isRequired,
-	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired
+	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired,
+	isDropTarget: PropTypes.bool.isRequired,
+	onSquareClick: PropTypes.func,
+	canDragShips: PropTypes.bool
 }
 
 export default SquaresContainer;
