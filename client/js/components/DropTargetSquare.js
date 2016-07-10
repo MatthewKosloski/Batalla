@@ -29,17 +29,36 @@ function collect(connect, monitor) {
 	};
 }
 
-class Square extends Component {
+class DropTargetSquare extends Component {
 	render() {
-		const {x, y, onSquareHover, connectDropTarget, isBusy, isOver, canDrop} = this.props;
+		const {
+			x, 
+			y,
+			onSquareHover, 
+			connectDropTarget, 
+			isOver, 
+			canDrop, 
+			isHit, 
+			isBusy,
+			isGuessed
+		} = this.props;
 		let className = 'board__square';
-		let backgroundColor;
-		if(isOver && canDrop) backgroundColor = 'rgba(0, 255, 0, 0.33)';
-		return connectDropTarget(<div className={className} onMouseOver={onSquareHover} style={{backgroundColor}}>{x}, {y}</div>);
+		let style = {};
+		if(isOver && canDrop) style.backgroundColor = 'rgba(0, 255, 0, 0.33)';
+		if(!isHit && isGuessed) style.backgroundColor = 'rgba(255, 255, 0, 0.33)';
+		if(isHit && isBusy) style.backgroundColor = 'rgba(255, 0, 0, 0.33)';
+		return connectDropTarget(
+			<div 
+				className={className} 
+				onMouseOver={onSquareHover} 
+				style={style}>
+				{x}, {y}
+			</div>
+		);
 	}
 }
 
-Square.propTypes = {
+DropTargetSquare.propTypes = {
 	x: PropTypes.number.isRequired,
 	y: PropTypes.number.isRequired,
 	isBusy: PropTypes.bool.isRequired,
@@ -47,4 +66,4 @@ Square.propTypes = {
 	canDragShips: PropTypes.bool.isRequired
 }
 
-export default DropTarget(DRAGGABLE_SHIP, squareTarget, collect)(Square);
+export default DropTarget(DRAGGABLE_SHIP, squareTarget, collect)(DropTargetSquare);

@@ -1,14 +1,21 @@
 import React, {Component} from 'react';
-import {opponentArrived, opponentDeparted, disableGame} from '../actions';
 import {connect} from 'react-redux';
 import BoardsContainer from './BoardsContainer';
+
+import {
+	opponentArrived, 
+	opponentDeparted, 
+	disableGame, 
+	canGuess
+} from '../actions';
 
 import {
 	JOIN_GAME, 
 	DISABLE_GAME, 
 	MESSAGE_FROM_SERVER, 
-	OPPONENT_JOINED, 
-	OPPONENT_LEFT
+	OPPONENT_LEFT,
+	ALL_CLIENTS_CONNECTED,
+	CAN_GUESS
 } from '../../../common/constants/socketEvents';
 
 class GameContainer extends Component {
@@ -18,6 +25,8 @@ class GameContainer extends Component {
 		this.handleDisableGame = this.handleDisableGame.bind(this);
 		this.handleOpponentArrival = this.handleOpponentArrival.bind(this);
 		this.handleOpponentDeparture = this.handleOpponentDeparture.bind(this);
+		this.handleCanGuess = this.handleCanGuess.bind(this);
+		this.getShipsByType = this.getShipsByType.bind(this);
 	}
 
 	componentDidMount() {
@@ -25,8 +34,19 @@ class GameContainer extends Component {
 		socket.emit(JOIN_GAME, params.gameId);
 		socket.on(MESSAGE_FROM_SERVER, this.displayMessage);
 		socket.on(DISABLE_GAME, this.handleDisableGame);
-		socket.on(OPPONENT_JOINED, this.handleOpponentArrival);
+		socket.on(ALL_CLIENTS_CONNECTED, this.handleOpponentArrival);
 		socket.on(OPPONENT_LEFT, this.handleOpponentDeparture);
+		socket.on(CAN_GUESS, this.handleCanGuess);
+	}
+
+	getShipsByType([...types]) {
+		const {ships} = this.props;
+		return [...types].map((type) => ships.filter((ship) => ship.type === type)[0]);
+	}
+
+	handleCanGuess() {
+		const {dispatch} = this.props;
+		dispatch(canGuess(true));
 	}
 
 	handleOpponentArrival() {
@@ -37,6 +57,7 @@ class GameContainer extends Component {
 	handleOpponentDeparture() {
 		const {dispatch} = this.props;
 		dispatch(opponentDeparted());
+		console.log('OPPONENT_LEFT');
 	}
 
 	handleDisableGame() {
@@ -54,23 +75,38 @@ class GameContainer extends Component {
 			ships, 
 			busySquares, 
 			dispatch, 
-			playerGuesses, 
 			socket,
 			noOpponent,
-			isWaitingForOpponent
+			isWaitingForOpponent,
+			params,
+			canMakeGuess,
+			canDragShips, 
+			opponentGuesses,
+			playerGuesses,
+			shipsDestroyed,
+			shipsSunkByPlayer
 		} = this.props;
 		return(
 			<div className="game-container">
 				<p>Opponent Connected: {noOpponent ? 'false' : 'true'}</p>
 				<p>Opponent Ready: {isWaitingForOpponent ? 'false' : 'true'}</p>
+				<p>{canMakeGuess ? 'Your Turn!' : 'Opponent\'s Turn!'}</p>
 				{!gameDisabled ? 
 					<BoardsContainer 
 						ships={ships}
 						busySquares={busySquares}
 						dispatch={dispatch}
-						playerGuesses={playerGuesses}
 						socket={socket}
 						isWaitingForOpponent={isWaitingForOpponent}
+						params={params}
+						canMakeGuess={canMakeGuess}
+						noOpponent={noOpponent}
+						canDragShips={canDragShips}
+						opponentGuesses={opponentGuesses}
+						playerGuesses={playerGuesses}
+						shipsDestroyed={shipsDestroyed}
+						shipsSunkByPlayer={shipsSunkByPlayer}
+						getShipsByType={this.getShipsByType}
 					/> : <p>This game is currently in progress.</p>}
 			</div>
 		);
@@ -82,17 +118,27 @@ function mapStateToProps(state) {
 		ships, 
 		busySquares, 
 		gameDisabled, 
-		playerGuesses,
 		noOpponent,
-		isWaitingForOpponent
+		isWaitingForOpponent,
+		canMakeGuess,
+		canDragShips, 
+		opponentGuesses,
+		playerGuesses,
+		shipsDestroyed,
+		shipsSunkByPlayer
 	} = state;
 	return {
 		ships,
 		busySquares,
 		gameDisabled,
-		playerGuesses,
 		noOpponent,
-		isWaitingForOpponent
+		isWaitingForOpponent,
+		canMakeGuess,
+		canDragShips, 
+		opponentGuesses,
+		playerGuesses,
+		shipsDestroyed,
+		shipsSunkByPlayer
 	}
 }
 

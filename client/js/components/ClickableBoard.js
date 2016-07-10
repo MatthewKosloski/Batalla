@@ -1,21 +1,25 @@
 import React, {PropTypes} from 'react';
-import SquaresContainer from '../containers/SquaresContainer';
+import OpponentShipsContainer from '../containers/OpponentShipsContainer';
+import ClickableSquaresContainer from '../containers/ClickableSquaresContainer';
 
-function ClickableBoard({busySquares, onSquareClick}) {
+function ClickableBoard({playerGuesses, onSquareClick, shipsSunkByPlayer}) {
 	return (
 		<div className="board board--clickable">
-			<SquaresContainer 
-				busySquares={busySquares}
+			<OpponentShipsContainer 
+				shipsSunkByPlayer={shipsSunkByPlayer}
+			/>
+			<ClickableSquaresContainer 
+				playerGuesses={playerGuesses}
 				onSquareClick={onSquareClick}
-				isDropTarget={false}
 			/>
 		</div>
 	);
 }
 
 ClickableBoard.propTypes = {
-	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired,
+	playerGuesses: PropTypes.arrayOf(PropTypes.object).isRequired,
 	onSquareClick: PropTypes.func.isRequired,
+	shipsSunkByPlayer: PropTypes.arrayOf(PropTypes.object).isRequired,
 	dispatch: PropTypes.func.isRequired
 }
 

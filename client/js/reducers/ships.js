@@ -1,8 +1,34 @@
-import {ADD_SHIPS, PLACE_SHIP, CHANGE_ORIENTATION, SET_DRAG_ORIGIN} from '../constants/actionTypes';
-import {AIRCRAFT_CARRIER, BATTLESHIP, CRUISER, DESTROYER, SUBMARINE} from '../constants/ships';
+import {
+	AIRCRAFT_CARRIER, 
+	BATTLESHIP, 
+	CRUISER, 
+	DESTROYER, 
+	SUBMARINE
+} from '../constants/ships';
+
+import {
+	ADD_SHIPS, 
+	PLACE_SHIP, 
+	CHANGE_ORIENTATION, 
+	SET_DRAG_ORIGIN,
+	DESTROY_SHIP
+} from '../constants/actionTypes';
 
 const ships = (state = [], action) => {
 	switch (action.type) {
+		case DESTROY_SHIP: {
+			const {type} = action.payload;
+			const i = state.map((e) => e.type).indexOf(type);
+			const destroyed = true;
+			return [
+				...state.slice(0, i),
+				{
+					...state[i],
+					destroyed
+				},
+				...state.slice(i+1)
+			];
+		}
 		case ADD_SHIPS: {
 			const {ships} = action.payload;
 			return [...ships];

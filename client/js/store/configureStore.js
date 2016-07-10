@@ -8,7 +8,7 @@ import rootReducer from '../reducers';
 const logger = createLogger();
 
 export default function configureStore(preloadedState) {
-	return createStore(rootReducer, preloadedState, applyMiddleware(thunk, logger));
+	return createStore(rootReducer, preloadedState, applyMiddleware(thunk));
 }
 
 export const history = syncHistoryWithStore(browserHistory, configureStore());

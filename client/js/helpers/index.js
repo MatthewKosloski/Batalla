@@ -1,9 +1,25 @@
-export const getSmallestFromArray = (array) => {
-	return array.reduce((a,b) => Math.min(a,b));
+export const calculateShipStyle = (isHorizontal, coordinates) => {
+	const {length} = coordinates;
+	const xCoordinates = getXCoordinates(coordinates);
+	const yCoordinates = getYCoordinates(coordinates);
+	const smallestX = getSmallestFromArray(xCoordinates);
+	const smallestY = getSmallestFromArray(yCoordinates);
+	return {
+		width: isHorizontal ? `${length * 10}%` : '10%',
+		height: isHorizontal ? '10%' : `${length * 10}%`,
+		top: isHorizontal ? `${coordinates[0][1] * 10}%` : `${smallestY * 10}%`,
+		left: isHorizontal ? `${smallestX * 10}%` : `${coordinates[0][0] * 10}%` 
+	};
 }
 
+export const getSmallestFromArray = (array) => array.reduce((a,b) => Math.min(a,b));
+
+export const getXCoordinates = (crds) => crds.map((crd) => crd[0]);
+
+export const getYCoordinates = (crds) => crds.map((crd) => crd[1]);
+
 export const haveSamePair = (arr1, arr2) => {
-	return arr1.map((b) => arr2.filter((a) => a[0] === b[0] && a[1] === b[1]).length > 0 ? true : false).indexOf(true) > -1 ? true : false;
+	return arr1.map((a) => arr2.filter((b) => a[0] === b[0] && a[1] === b[1]).length > 0 ? true : false).indexOf(true) > -1 ? true : false;
 }
 
 export const arraySplicer = (anArray, itemsToRemoveFromArray) => {
@@ -19,14 +35,6 @@ export const arraySplicer = (anArray, itemsToRemoveFromArray) => {
 
 export const getIndexOfArray = (child, parent) => {
 	return child.map((i) => parent.map((j) => `${j[0]},${j[1]}`).indexOf(`${i[0]},${i[1]}`))[0];
-}
-
-export const getXCoordinates = (crds) => {
-	return crds.map((crd) => crd[0]);
-}
-
-export const getYCoordinates = (crds) => {
-	return crds.map((crd) => crd[1]);
 }
 
 export const areValidCoordinates = (crds) => {

@@ -61,7 +61,15 @@ class Ship extends Component {
 
 	render() {
 
-		const {orientation, type, coordinates, onShipClick, style, connectDragSource, isDragging} = this.props;
+		const {
+			orientation, 
+			type, 
+			coordinates, 
+			onShipClick, 
+			style, 
+			connectDragSource, 
+			isDragging
+		} = this.props;
 
 		let className = `board__ship ${type.toLowerCase()} ${orientation}`;
 		const modules = [];

@@ -1,44 +1,100 @@
-import {
-	PLACE_SHIP, 
-	ADD_SHIPS, 
-	UPDATE_BUSY_SQUARES, 
-	CHANGE_ORIENTATION, 
-	SET_DRAG_ORIGIN,
-	DISABLE_GAME,
-	DISABLE_DRAGGING,
-	OPPONENT_ARRIVED,
-	OPPONENT_DEPARTED,
-	OPPONENT_READY
-} from '../constants/actionTypes';
+import * as actions from '../constants/actionTypes';
+
+export function addSunkenShip(type, coordinates) {
+	return {
+		type: actions.ADD_SUNKEN_SHIP,
+		payload: {
+			type,
+			coordinates
+		}
+	}
+}
+
+export function calculateDestroyedShips(ships, opponentGuesses) {
+	return {
+		type: actions.CALCULATE_DESTROYED_SHIPS,
+		payload: {
+			ships,
+			opponentGuesses
+		}
+	}
+}
+
+export function destroyShip(type) {
+	return {
+		type: actions.DESTROY_SHIP,
+		payload: {
+			type
+		}
+	}
+}
+
+export function addPlayerGuess(guess, hit) {
+	return {
+		type: actions.ADD_PLAYER_GUESS,
+		payload: {
+			guess,
+			hit
+		}
+	}
+}
+
+export function addOpponentGuess(guess) {
+	return (dispatch, getState) => {
+		dispatch({ 
+			type: actions.ADD_OPPONENT_GUESS,
+			payload: {
+				guess
+			}
+		})
+		dispatch(canGuess(true))
+		dispatch(calculateDestroyedShips(getState().ships, getState().opponentGuesses))
+	}
+}
+
+export function canGuess(bool) {
+	return {
+		type: actions.CAN_GUESS,
+		payload: {
+			bool
+		}
+	}
+}
+
+export function opponentReady() {
+	return {
+		type: actions.OPPONENT_READY
+	}
+}
 
 export function opponentArrived() {
 	return {
-		type: OPPONENT_ARRIVED
+		type: actions.OPPONENT_ARRIVED
 	}
 }
 
 export function opponentDeparted() {
 	return {
-		type: OPPONENT_DEPARTED
+		type: actions.OPPONENT_DEPARTED
 	}
 }
 
 export function disableDragging() {
 	return {
-		type: DISABLE_DRAGGING
+		type: actions.DISABLE_DRAGGING
 	}
 }
 
 export function disableGame() {
 	return {
-		type: DISABLE_GAME
+		type: actions.DISABLE_GAME
 	}
 }
 
 
 export function setDragOrigin(type, dragOrigin) {
 	return {
-		type: SET_DRAG_ORIGIN,
+		type: actions.SET_DRAG_ORIGIN,
 		payload: {
 			type,
 			dragOrigin
@@ -49,7 +105,7 @@ export function setDragOrigin(type, dragOrigin) {
 export function changeOrientation(type, orientation, newCoordinates, canChangeOrientation) {
 	return (dispatch, getState) => {
 		dispatch({ 
-			type: CHANGE_ORIENTATION,
+			type: actions.CHANGE_ORIENTATION,
 			payload: {
 				type,
 				orientation,
@@ -64,7 +120,7 @@ export function changeOrientation(type, orientation, newCoordinates, canChangeOr
 export function placeShip(type, coordinates, canPlace) {
 	return (dispatch, getState) => {
 		dispatch({ 
-			type: PLACE_SHIP,
+			type: actions.PLACE_SHIP,
 			payload: {
 				type,
 				coordinates,
@@ -78,7 +134,7 @@ export function placeShip(type, coordinates, canPlace) {
 export function addShips(ships) {
 	return (dispatch, getState) => {
 		dispatch({
-			type: ADD_SHIPS,
+			type: actions.ADD_SHIPS,
 			payload: {
 				ships
 			}
@@ -89,7 +145,7 @@ export function addShips(ships) {
 
 function _updateBusySquares(ships) {
 	return {
-		type: UPDATE_BUSY_SQUARES,
+		type: actions.UPDATE_BUSY_SQUARES,
 		payload: {
 			ships
 		}

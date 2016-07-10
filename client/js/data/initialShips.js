@@ -1,32 +1,32 @@
-import {AIRCRAFT_CARRIER, BATTLESHIP, CRUISER, DESTROYER, SUBMARINE} from '../constants/ships';
+import * as ships from '../constants/ships';
 
 const initialShips = [
 	{
-		type: AIRCRAFT_CARRIER,
+		type: ships.AIRCRAFT_CARRIER,
 		coordinates: [[1,0], [2,0], [3,0], [4,0], [5,0]],
 		orientation: 'horizontal',
 		dragOrigin: []
 	},
 	{
-		type: BATTLESHIP,
+		type: ships.BATTLESHIP,
 		coordinates: [[6,4], [6,5], [6,6], [6,7]],
 		orientation: 'vertical',
 		dragOrigin: []
 	},
 	{
-		type: CRUISER,
+		type: ships.CRUISER,
 		coordinates: [[6,2], [7,2], [8,2]],
 		orientation: 'horizontal',
 		dragOrigin: []
 	},
 	{
-		type: DESTROYER,
+		type: ships.DESTROYER,
 		coordinates: [[0,8], [0,9]],
 		orientation: 'vertical',
 		dragOrigin: []
 	},
 	{
-		type: SUBMARINE,
+		type: ships.SUBMARINE,
 		coordinates: [[3,6]],
 		orientation: 'horizontal',
 		dragOrigin: []

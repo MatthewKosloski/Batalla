@@ -52,6 +52,10 @@ body {
 	z-index: 2;
 }
 
+.opponent-ship {
+	box-shadow: inset 0 0 0 3px red;
+}
+
 .horizontal {
 	@include flex-direction(row);
 }

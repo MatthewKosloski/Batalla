@@ -14,7 +14,7 @@ const router = (
 		<Router history={browserHistory}>
 			<Route path="/" component={AppContainer}>
 				<IndexRoute component={HomeContainer}></IndexRoute>
-				<Route path="/game/:gameId" component={GameContainer}></Route>
+				<Route path="/g/:gameId" component={GameContainer}></Route>
 			</Route>
 		</Router>
 	</Provider>
