@@ -1,3 +1,47 @@
+export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
+export const haveSamePair = (arr1, arr2) => {
+	return arr1.map((a) => arr2.filter((b) => a[0] === b[0] && a[1] === b[1]).length > 0 ? true : false).indexOf(true) > -1 ? true : false;
+}
+
+export const generateCoordinatesForShips = (ships) => {
+	const usedCoordinates = [];
+
+	const generateCoordinatesForShip = (ship) => {
+		const {length} = ship;
+		const orientation = getRandomInt(0, 1) === 0 ? 'horizontal' : 'vertical';
+		let coordinates = [];
+
+		let x = getRandomInt(0, 9);
+		let y = getRandomInt(0, 9);
+
+		const getCrd = (i) => {
+			let xOffset = Math.abs(length - x);
+			let yOffset = Math.abs(length - y);
+			return orientation === 'horizontal' ? [xOffset + i, yOffset] : [xOffset, yOffset + i];
+		};
+
+		let i = 0;
+		while(i < length) {
+			let crd = getCrd(i);
+			if(!haveSamePair([crd], usedCoordinates)) {
+				usedCoordinates.push(crd);
+				coordinates.push(crd);
+				i++;
+			} else {
+				x = getRandomInt(0, 9);
+				y = getRandomInt(0, 9);
+				coordinates = [];
+				i = 0;
+			}
+		}
+
+		return {...ship, coordinates, orientation};
+	};
+
+	return ships.map((ship) => generateCoordinatesForShip(ship));
+};
+
 export const calculateShipStyle = (isHorizontal, coordinates) => {
 	const {length} = coordinates;
 	const xCoordinates = getXCoordinates(coordinates);
@@ -17,10 +61,6 @@ export const getSmallestFromArray = (array) => array.reduce((a,b) => Math.min(a,
 export const getXCoordinates = (crds) => crds.map((crd) => crd[0]);
 
 export const getYCoordinates = (crds) => crds.map((crd) => crd[1]);
-
-export const haveSamePair = (arr1, arr2) => {
-	return arr1.map((a) => arr2.filter((b) => a[0] === b[0] && a[1] === b[1]).length > 0 ? true : false).indexOf(true) > -1 ? true : false;
-}
 
 export const arraySplicer = (anArray, itemsToRemoveFromArray) => {
 	let indices = itemsToRemoveFromArray.map((i) => anArray.map((j) => `${j[0]},${j[1]}`).indexOf(`${i[0]},${i[1]}`));

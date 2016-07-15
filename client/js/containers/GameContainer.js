@@ -84,7 +84,8 @@ class GameContainer extends Component {
 			opponentGuesses,
 			playerGuesses,
 			shipsDestroyed,
-			shipsSunkByPlayer
+			shipsSunkByPlayer,
+			isWinner
 		} = this.props;
 		return(
 			<div className="game-container">
@@ -107,6 +108,7 @@ class GameContainer extends Component {
 						shipsDestroyed={shipsDestroyed}
 						shipsSunkByPlayer={shipsSunkByPlayer}
 						getShipsByType={this.getShipsByType}
+						isWinner={isWinner}
 					/> : <p>This game is currently in progress.</p>}
 			</div>
 		);
@@ -125,7 +127,8 @@ function mapStateToProps(state) {
 		opponentGuesses,
 		playerGuesses,
 		shipsDestroyed,
-		shipsSunkByPlayer
+		shipsSunkByPlayer,
+		isWinner
 	} = state;
 	return {
 		ships,
@@ -138,7 +141,8 @@ function mapStateToProps(state) {
 		opponentGuesses,
 		playerGuesses,
 		shipsDestroyed,
-		shipsSunkByPlayer
+		shipsSunkByPlayer,
+		isWinner
 	}
 }
 

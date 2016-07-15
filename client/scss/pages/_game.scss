@@ -1,0 +1,99 @@
+.game {
+	@include display(flex);
+	@include flex-direction(column);
+	@include breakpoint(lg) {
+		@include flex-direction(row);
+	}
+	width: 100%;
+	height: 100vh;
+}
+
+.game__main {
+	background-color: $blackMarlin;
+	@include breakpoint(lg) {
+		@include flex-basis(75%);
+		max-width: 75%;
+	}
+}
+
+.game__aside {
+	@include breakpoint(lg) {
+		@include flex-basis(25%);
+		max-width: 25%;
+	}
+	height: 100%;
+	position: relative;
+}
+
+.game__aside-inner {
+	background-color: $desertStorm;
+	@include breakpoint(lg) {
+		position: fixed;
+		right: 0;
+		width: 25%;
+		height: 100%;
+	}
+}
+
+.game__header {
+	padding: 50px 0;
+}
+
+.game__boards {
+}
+
+.game__header-inner {
+	color: $white;
+	text-align: center;
+}
+
+.game__header-title {
+	font-size: rem(48);
+	font-weight: 700;
+	text-transform: uppercase;
+	margin: 0;
+}
+
+.game__board {
+	width: 100%;
+	padding-bottom: 100%;
+	@include breakpoint(1400px) {
+		width: 50%;
+		padding-bottom: 50%;
+		float: left;
+	}
+}
+
+.game__board-inner {
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	padding: 5%;
+}
+
+.board--player {
+	background-color: $lightBlue;
+}
+
+.board--opponent {
+	background-color: $darkBlue;
+}
+
+.ships-container {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.squares-container {
+	@include display(flex);
+	@include flex-wrap(wrap);
+	width: 100%;
+	height: 100%;
+}
+
+.container {
+	max-width: 100%;
+	margin: 0 auto;
+}

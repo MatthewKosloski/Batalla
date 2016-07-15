@@ -4,7 +4,7 @@
 //
 //---------------------------
 
-/* colors */
+/* generic colors */
 $white: #fff;
 
 /* units */
@@ -21,3 +21,10 @@ $breakpoint-small: rem(500);
 $grid-gutter-width: 20px !default;
 $grid-pushes: false !default;
 $grid-pulls: false !default;
+
+/* color scheme */
+$blackMarlin: #373A41;
+$darkBlue: #9BBEE3;
+$darkBlueShadow: #7491B0;
+$lightBlue: #D9EBFF;
+$desertStorm: #f0f0f0;

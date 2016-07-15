@@ -60,7 +60,6 @@ class Ship extends Component {
 	}
 
 	render() {
-
 		const {
 			orientation, 
 			type, 
@@ -68,10 +67,14 @@ class Ship extends Component {
 			onShipClick, 
 			style, 
 			connectDragSource, 
-			isDragging
+			isDragging,
+			shipsDestroyed
 		} = this.props;
 
 		let className = `board__ship ${type.toLowerCase()} ${orientation}`;
+		if(shipsDestroyed.indexOf(type) !== -1) {
+			className += ' ship--destroyed';
+		}
 		const modules = [];
 		for(let i = 0; i < coordinates.length; i++) {
 			modules.push(this.renderModules(coordinates[i], i));
@@ -96,7 +99,8 @@ Ship.propTypes = {
 	busySquares: PropTypes.arrayOf(PropTypes.array.isRequired).isRequired,
 	isDragging: PropTypes.bool.isRequired,
 	getShipsByType: PropTypes.func.isRequired,
-	canDragShips: PropTypes.bool.isRequired
+	canDragShips: PropTypes.bool.isRequired,
+	shipsDestroyed: PropTypes.array.isRequired,
 };
 
 export default DragSource(DRAGGABLE_SHIP, shipSource, collect)(Ship);

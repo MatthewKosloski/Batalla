@@ -17,7 +17,7 @@ class ShipsContainer extends Component {
 	}
 
 	renderShip(ship, index) {
-		const {dispatch, busySquares, canDragShips, getShipsByType} = this.props;
+		const {dispatch, busySquares, canDragShips, getShipsByType, shipsDestroyed} = this.props;
 		const {type, coordinates, orientation} = ship;
 		const {length} = coordinates;
 		const isHorizontal = orientation === 'horizontal';
@@ -32,6 +32,7 @@ class ShipsContainer extends Component {
 				busySquares={busySquares} 
 				getShipsByType={getShipsByType}
 				canDragShips={canDragShips}
+				shipsDestroyed={shipsDestroyed}
 				{...ship}
 			/>
 		);
@@ -71,7 +72,8 @@ ShipsContainer.propTypes = {
 	ships: PropTypes.arrayOf(PropTypes.object).isRequired,
 	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired,
 	canDragShips: PropTypes.bool.isRequired,
-	dispatch: PropTypes.func.isRequired
+	dispatch: PropTypes.func.isRequired,
+	shipsDestroyed: PropTypes.array.isRequired,
 }
 
 export default ShipsContainer;

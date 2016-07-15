@@ -18,12 +18,13 @@ import {ADD_SUNKEN_SHIP} from '../constants/actionTypes';
 const shipsSunkByPlayer = (state = [], action) => {
 	switch (action.type) {
 		case ADD_SUNKEN_SHIP: {
-			const {type, coordinates} = action.payload;
+			const {type, coordinates, orientation} = action.payload;
 			return [
 				...state,
 				{
 					type,
-					coordinates
+					coordinates,
+					orientation
 				}
 			]
 		}	

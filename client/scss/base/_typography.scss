@@ -27,3 +27,10 @@ h3 {
 h4 {
 	font-size: rem(14);
 }
+
+a {
+	text-decoration: underline;
+	&:hover {
+		text-decoration: none;
+	}
+}

@@ -1,7 +1,3 @@
-body {
-	padding: 10px;
-}
-
 .boards {
 	@include display(flex);
 	max-width: 1000px;
@@ -52,7 +48,8 @@ body {
 	z-index: 2;
 }
 
-.opponent-ship {
+.opponent-ship,
+.ship--destroyed {
 	box-shadow: inset 0 0 0 3px red;
 }
 

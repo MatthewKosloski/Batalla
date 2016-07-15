@@ -17,7 +17,9 @@ var RECEIVE_GAME_ID = socketEvents.RECEIVE_GAME_ID,
 	RECEIVE_GUESS_FEEDBACK = socketEvents.RECEIVE_GUESS_FEEDBACK,
 	SEND_DESTROYED_SHIPS = socketEvents.SEND_DESTROYED_SHIPS,
 	OPPONENT_SHIP_DESTROYED = socketEvents.OPPONENT_SHIP_DESTROYED,
-	RECEIVE_DESTROYED_SHIP = socketEvents.RECEIVE_DESTROYED_SHIP
+	RECEIVE_DESTROYED_SHIP = socketEvents.RECEIVE_DESTROYED_SHIP,
+	OPPONENT_HAS_WON = socketEvents.OPPONENT_HAS_WON,
+	PLAYER_HAS_WON = socketEvents.PLAYER_HAS_WON,
 	CONNECTION = 'connection',
 	DISCONNECT = 'disconnect';
 
@@ -31,11 +33,17 @@ module.exports = function(io){
 		socket.on(SEND_GUESS_FEEDBACK, handleSendGuessFeedback);
 		socket.on(SEND_DESTROYED_SHIPS, handleSendDestroyedShips);
 		socket.on(OPPONENT_SHIP_DESTROYED, handleOpponentShipDestroyed);
+		socket.on(OPPONENT_HAS_WON, handleOpponentWinning);
+
+		function handleOpponentWinning(gameId) {
+			socket.broadcast.to(gameId).emit(PLAYER_HAS_WON);
+		}
 
 		function handleOpponentShipDestroyed(data) {
 			socket.broadcast.to(data.gameId).emit(RECEIVE_DESTROYED_SHIP, {
-				destroyedShip: data.destroyedShip,
-				destroyedShipCoordinates: data.destroyedShipCoordinates
+				type: data.destroyedShipType,
+				coordinates: data.coordinates,
+				orientation: data.orientation
 			});
 		}
 

@@ -25,7 +25,8 @@ class DraggableBoard extends Component {
 			canDragShips, 
 			dispatch,
 			opponentGuesses,
-			getShipsByType
+			getShipsByType,
+			shipsDestroyed
 		} = this.props;
 		return (
 			<div className="board board--draggable">
@@ -35,6 +36,7 @@ class DraggableBoard extends Component {
 					dispatch={dispatch}
 					canDragShips={canDragShips} 
 					getShipsByType={getShipsByType}
+					shipsDestroyed={shipsDestroyed}
 				/>
 				<DropTargetSquaresContainer
 					busySquares={busySquares}
@@ -51,7 +53,8 @@ DraggableBoard.propTypes = {
 	busySquares: PropTypes.arrayOf(PropTypes.array).isRequired,
 	dispatch: PropTypes.func.isRequired,
 	canDragShips: PropTypes.bool.isRequired,
-	getShipsByType: PropTypes.func.isRequired
+	getShipsByType: PropTypes.func.isRequired,
+	shipsDestroyed: PropTypes.array.isRequired,
 }
 
 export default DragDropContext(HTML5Backend)(DraggableBoard);

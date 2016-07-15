@@ -12,6 +12,8 @@ import canMakeGuess from './canMakeGuess';
 import playerGuesses from './playerGuesses';
 import shipsDestroyed from './shipsDestroyed';
 import shipsSunkByPlayer from './shipsSunkByPlayer';
+import isWinner from './isWinner';
+import isCreatingRoom from './isCreatingRoom';
 
 const rootReducer = combineReducers({
 	routing: routerReducer,
@@ -25,7 +27,9 @@ const rootReducer = combineReducers({
 	canMakeGuess,
 	playerGuesses,
 	shipsDestroyed,
-	shipsSunkByPlayer
+	shipsSunkByPlayer,
+	isWinner,
+	isCreatingRoom
 });
 
 export default rootReducer;

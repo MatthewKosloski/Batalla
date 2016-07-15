@@ -1,11 +1,30 @@
 import * as actions from '../constants/actionTypes';
 
-export function addSunkenShip(type, coordinates) {
+export function setCreatingRoom(bool) {
+	return {
+		type: actions.SET_CREATING_ROOM,
+		payload: {
+			bool
+		}
+	}
+}
+
+export function setWinnerStatus(bool) {
+	return {
+		type: actions.SET_WINNER_STATUS,
+		payload: {
+			bool
+		}
+	}
+}
+
+export function addSunkenShip(type, coordinates, orientation) {
 	return {
 		type: actions.ADD_SUNKEN_SHIP,
 		payload: {
 			type,
-			coordinates
+			coordinates,
+			orientation
 		}
 	}
 }

@@ -2,7 +2,13 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import ClickableBoard from '../components/ClickableBoard';
 import DraggableBoard from '../components/DraggableBoard';
-import {getIndexOfArray, haveSamePair} from '../helpers';
+import shipsSchema from '../data/shipsSchema';
+
+import {
+	getIndexOfArray, 
+	haveSamePair, 
+	generateCoordinatesForShips
+} from '../helpers';
 
 import {
 	disableDragging,
@@ -10,7 +16,9 @@ import {
 	canGuess,
 	addOpponentGuess,
 	addPlayerGuess,
-	addSunkenShip
+	addSunkenShip,
+	setWinnerStatus,
+	changeOrientation
 } from '../actions';
 
 import {
@@ -21,7 +29,9 @@ import {
 	SEND_GUESS_FEEDBACK,
 	RECEIVE_GUESS_FEEDBACK,
 	OPPONENT_SHIP_DESTROYED,
-	RECEIVE_DESTROYED_SHIP
+	RECEIVE_DESTROYED_SHIP,
+	OPPONENT_HAS_WON,
+	PLAYER_HAS_WON
 } from '../../../common/constants/socketEvents';
 
 class BoardsContainer extends Component {
@@ -36,20 +46,39 @@ class BoardsContainer extends Component {
 		this.handleReceivedGuess = this.handleReceivedGuess.bind(this);
 		this.handleReceivedGuessFeedback = this.handleReceivedGuessFeedback.bind(this);
 		this.handleReceiveDestroyedShip = this.handleReceiveDestroyedShip.bind(this);
+		this.handlePlayerHasWon = this.handlePlayerHasWon.bind(this);
+		this.handleShuffleShips = this.handleShuffleShips.bind(this);
 	}
 
 	componentWillReceiveProps(nextProps) {
-		const {socket, params, dispatch, ships, getShipsByType, shipsDestroyed: oldShipsDestroyed} = this.props;
+		const {
+			socket, 
+			params, 
+			dispatch, 
+			ships, 
+			getShipsByType, 
+			shipsDestroyed: oldShipsDestroyed
+		} = this.props;
 		const {shipsDestroyed: nextShipsDestroyed} = nextProps;
 		if(oldShipsDestroyed.length !== nextShipsDestroyed.length) {
-			const destroyedShip = nextShipsDestroyed[0];
-			const destroyedShipCoordinates = getShipsByType([destroyedShip])[0].coordinates;
+			const destroyedShipType = nextShipsDestroyed.filter((x) => oldShipsDestroyed.indexOf(x) === -1);
+			const destroyedShip = getShipsByType(destroyedShipType)[0];
+			console.log(destroyedShipType, destroyedShip);
+			const {coordinates, orientation} = destroyedShip;
 			const {gameId} = params;
-			console.log(`Your ${destroyedShip} has been destroyed.`, destroyedShipCoordinates);
-			socket.emit(OPPONENT_SHIP_DESTROYED, {destroyedShip, destroyedShipCoordinates, gameId});
-		}
-		if(ships.length && nextShipsDestroyed.length === ships.length) {
-			console.log('You lost!');
+			console.log(`Your ${destroyedShipType} has been destroyed.`, coordinates);
+			socket.emit(OPPONENT_SHIP_DESTROYED, {
+				destroyedShipType,
+				coordinates,
+				orientation, 
+				gameId
+			});
+			if(ships.length && nextShipsDestroyed.length === ships.length) {
+				const {gameId} = params;
+				console.log('You lost!');
+				dispatch(setWinnerStatus(false));
+				socket.emit(OPPONENT_HAS_WON, gameId);
+			}
 		}
 	}
 
@@ -59,13 +88,30 @@ class BoardsContainer extends Component {
 		socket.on(RECEIVE_GUESS, this.handleReceivedGuess);
 		socket.on(RECEIVE_GUESS_FEEDBACK, this.handleReceivedGuessFeedback);
 		socket.on(RECEIVE_DESTROYED_SHIP, this.handleReceiveDestroyedShip);
+		socket.on(PLAYER_HAS_WON, this.handlePlayerHasWon);
+	}
+
+	handleShuffleShips() {
+		const {dispatch} = this.props;
+		let newShips = generateCoordinatesForShips(shipsSchema);
+		for(let i = 0; i < newShips.length; i++) {
+			let ship = newShips[i];
+			let {type, orientation, coordinates} = ship;
+			dispatch(changeOrientation(type, orientation, coordinates, true));
+		}
+	}
+
+	handlePlayerHasWon() {
+		const {dispatch} = this.props;
+		dispatch(setWinnerStatus(true));
+		console.log('You won!');
 	}
 
 	handleReceiveDestroyedShip(data) {
 		const {dispatch} = this.props;
-		const {destroyedShip, destroyedShipCoordinates} = data;
-		console.log(`You destroyed the ${destroyedShip} at`, destroyedShipCoordinates);
-		dispatch(addSunkenShip(destroyedShip, destroyedShipCoordinates));
+		const {type, coordinates, orientation} = data;
+		console.log(`You destroyed the ${type} at`, coordinates);
+		dispatch(addSunkenShip(type, coordinates, orientation));
 	}
 
 	handleReceivedGuessFeedback(data) {
@@ -109,10 +155,11 @@ class BoardsContainer extends Component {
 			socket,
 			params,
 			dispatch,
-			playerGuesses
+			playerGuesses,
+			isWinner
 		} = this.props;
 		const isBusy = haveSamePair([[x, y]], playerGuesses.map((i) => i.guess));
-		if(!noOpponent && !isWaitingForOpponent && canMakeGuess && !isBusy) {
+		if(!noOpponent && !isWaitingForOpponent && canMakeGuess && !isBusy && isWinner === null) {
 			socket.emit(SEND_GUESS, {
 				gameId: params.gameId, 
 				square: [x, y]
@@ -132,7 +179,8 @@ class BoardsContainer extends Component {
 			isWaitingForOpponent,
 			noOpponent,
 			shipsSunkByPlayer,
-			getShipsByType
+			getShipsByType,
+			shipsDestroyed
 		} = this.props;
 		return (
 			<div className="boards">
@@ -145,7 +193,9 @@ class BoardsContainer extends Component {
 						canDragShips={canDragShips}
 						dispatch={dispatch}
 						getShipsByType={getShipsByType}
+						shipsDestroyed={shipsDestroyed}
 					/>
+					<button onClick={this.handleShuffleShips}>Shuffle</button>
 					<button onClick={this.handlePlayerReady} disabled={!canDragShips||noOpponent}>Ready</button>
 				</div>
 				<div className="board__container">
