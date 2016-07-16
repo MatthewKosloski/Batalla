@@ -4,15 +4,14 @@ import {getIndexOfArray} from '../helpers';
 class ClickableSquare extends Component {
 	render() {
 		const {x, y, onSquareClick, playerGuesses, isBusy, isHit} = this.props;
-		let style = {};
-		if(!isHit && isBusy) style.backgroundColor = 'rgba(255, 255, 0, 0.33)';
-		if(isHit && isBusy) style.backgroundColor = 'rgba(255, 0, 0, 0.33)';
+		let boardSquareClass = 'board__square';
+		if(!isHit && isBusy) boardSquareClass += ' miss';
+		if(isHit && isBusy) boardSquareClass += ' hit';
 		return (
 			<div 
-				className="board__square" 
-				onClick={onSquareClick.bind(null, x, y)}
-				style={style}>
-					{x}, {y}
+				className={boardSquareClass} 
+				onClick={onSquareClick.bind(null, x, y)}>
+				<div className="board__square-dot dot--light-blue"></div>
 			</div>
 		);
 	}

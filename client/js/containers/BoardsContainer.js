@@ -183,10 +183,10 @@ class BoardsContainer extends Component {
 			shipsDestroyed
 		} = this.props;
 		return (
-			<div className="boards">
-				<div className="board__container">
-					<h2>Your Board</h2>
-					<DraggableBoard 
+			<div className="game__boards">
+				<div className="game__board board--player">
+					<div className="game__board-inner">
+						<DraggableBoard 
 						opponentGuesses={opponentGuesses}
 						ships={ships}
 						busySquares={busySquares}
@@ -197,15 +197,17 @@ class BoardsContainer extends Component {
 					/>
 					<button onClick={this.handleShuffleShips}>Shuffle</button>
 					<button onClick={this.handlePlayerReady} disabled={!canDragShips||noOpponent}>Ready</button>
+					</div>
 				</div>
-				<div className="board__container">
-					<h2>Opponent's Board</h2>
-					<ClickableBoard 
-						shipsSunkByPlayer={shipsSunkByPlayer}
-						playerGuesses={playerGuesses}
-						dispatch={dispatch}
-						onSquareClick={this.handlePlayerGuess}
-					/>
+				<div className="game__board board--opponent">
+					<div className="game__board-inner">
+						<ClickableBoard 
+							shipsSunkByPlayer={shipsSunkByPlayer}
+							playerGuesses={playerGuesses}
+							dispatch={dispatch}
+							onSquareClick={this.handlePlayerGuess}
+						/>
+					</div>
 				</div>
 			</div>
 		);

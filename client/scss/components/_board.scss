@@ -14,10 +14,8 @@
 .board {
 	@include display(flex);
 	@include flex-wrap(wrap);
-	border-top: 1px solid black;
-	border-right: 1px solid black;
 	width: 100%;
-	height: 500px;
+	height: 100%;
 	position: relative;
 }
 
@@ -27,24 +25,16 @@
 	@include justify-content(center);
 	width: 10%;
 	height: 10%;
-	border-bottom: 1px solid black;
-	border-left: 1px solid black;
 	z-index: 1;
 }
 
 .board__ship {
 	@include display(flex);
 	position: absolute;
-	box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 1);
 	cursor: move;
-	span {
-		width: 100%;
-		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5);
-	}
-	span.hit {
-		background-color: rgba(255, 0, 0, 0.50);
-	}
+	background-color: $yellow;
+	border-radius: 14px;
+	width: 90%;
 	z-index: 2;
 }
 
@@ -55,14 +45,12 @@
 
 .horizontal {
 	@include flex-direction(row);
+	box-shadow: 0 3px 0 $yellowShadow;
 }
 
 .vertical {
 	@include flex-direction(column);
-}
-
-.board__square.hit {
-	background-color: rgba(255, 255, 0, 0.50);
+	box-shadow: 3px 0 0 $yellowShadow;
 }
 
 .ships-container {
@@ -79,10 +67,57 @@
 	height: 100%;
 }
 
-.is-over {
-	background-color: rgba(255, 255, 0, 0.33);
+.board__square-dot {
+	width: 45%;
+    height: 45%;
+    border-radius: 100%;
+  	background-color: $darkBlueShadow;
+    box-shadow: 0px 3px 0px $darkBlueShadow;
+    border-width: 4px;
+    border-style: solid;
 }
 
-.can-drop {
-	background-color: rgba(0, 255, 0, 0.33);
+.dot--dark-blue {
+	border-color: $darkBlue;
+}
+
+.dot--light-blue {
+	border-color: $lightBlue;
+}
+
+.dot--dark-gray {
+	border-color: $yellowShadow;
+	background-color: #887933;
+	box-shadow: none;
+}
+
+.miss {
+	.board__square-dot {
+		background-color: $white;
+		border-color: $white;
+		box-shadow: 0px 3px 0px $whiteShadow;
+	}
+}
+
+.hit {
+	.board__square-dot {
+		background-color: $red;
+		border-color: $red;
+		box-shadow: 0px 3px 0px $redShadow;
+	}
+}
+
+.is-over {
+	.board__square-dot {
+		background-color: darken($darkBlueShadow, 10%);
+		border-color: darken($darkBlue, 10%);
+		box-shadow: 0px 3px 0px darken($darkBlueShadow, 10%);
+	}
+}
+
+.ship__module {
+	@include display(flex);
+	@include align-items(center);
+	@include justify-content(center);
+	@include flex(1);
 }

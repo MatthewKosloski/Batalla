@@ -1,7 +1,13 @@
 import React, {PropTypes} from 'react';
 
 function ShipModule({x, y, onShipMouseDown, hit}) {
-	return <span className={hit ? 'hit' : ''} onMouseDown={onShipMouseDown.bind(null, x, y)}></span>;
+	let className = 'ship__module';
+	if(hit) className += ' hit';
+	return (
+		<div className={className} onMouseDown={onShipMouseDown.bind(null, x, y)}>
+			<div className="board__square-dot dot--dark-gray"></div>
+		</div>
+	);
 }
 
 ShipModule.PropTypes = {

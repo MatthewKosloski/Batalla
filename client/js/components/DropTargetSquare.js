@@ -42,17 +42,15 @@ class DropTargetSquare extends Component {
 			isBusy,
 			isGuessed
 		} = this.props;
-		let className = 'board__square';
-		let style = {};
-		if(isOver && canDrop) style.backgroundColor = 'rgba(0, 255, 0, 0.33)';
-		if(!isHit && isGuessed) style.backgroundColor = 'rgba(255, 255, 0, 0.33)';
-		if(isHit && isBusy) style.backgroundColor = 'rgba(255, 0, 0, 0.33)';
+		let boardSquareClass = 'board__square';
+		if(isOver && canDrop) boardSquareClass += ' is-over';
+		if(!isHit && isGuessed) boardSquareClass += ' miss';
+		if(isHit && isBusy) boardSquareClass += ' hit';
 		return connectDropTarget(
 			<div 
-				className={className} 
-				onMouseOver={onSquareHover} 
-				style={style}>
-				{x}, {y}
+				className={boardSquareClass} 
+				onMouseOver={onSquareHover}>
+				<div className="board__square-dot dot--dark-blue"></div>
 			</div>
 		);
 	}

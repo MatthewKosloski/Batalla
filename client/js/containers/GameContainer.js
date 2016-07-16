@@ -87,30 +87,62 @@ class GameContainer extends Component {
 			shipsSunkByPlayer,
 			isWinner
 		} = this.props;
+
+		let headerTitle, headerDescription;
+		const isWinning = shipsSunkByPlayer.length > shipsDestroyed.length;
+		const isTie = shipsSunkByPlayer.length === shipsDestroyed.length
+
+			if(noOpponent) {
+				headerTitle = 'Opponent not connected';
+				headerDescription = 'share the url with a friend to play';
+			} else if(!noOpponent) {
+				headerTitle = 'Opponent is not ready';
+				headerDescription = 'the opponent is placing his ships';
+			} else if(canMakeGuess) {
+				headerTitle = 'Your turn';
+				headerDescription = isWinning ? 'you\'re winning' : isTie ? 'good luck' : 'you\'re losing';
+			} else if(!canMakeGuess) {
+				headerTitle = 'Opponent\'s Turn';
+				headerDescription = isWinning ? 'you\'re winning' : isTie ? 'good luck' : 'you\'re losing';
+			}
+
 		return(
-			<div className="game-container">
-				<p>Opponent Connected: {noOpponent ? 'false' : 'true'}</p>
-				<p>Opponent Ready: {isWaitingForOpponent ? 'false' : 'true'}</p>
-				<p>{canMakeGuess ? 'Your Turn!' : 'Opponent\'s Turn!'}</p>
-				{!gameDisabled ? 
-					<BoardsContainer 
-						ships={ships}
-						busySquares={busySquares}
-						dispatch={dispatch}
-						socket={socket}
-						isWaitingForOpponent={isWaitingForOpponent}
-						params={params}
-						canMakeGuess={canMakeGuess}
-						noOpponent={noOpponent}
-						canDragShips={canDragShips}
-						opponentGuesses={opponentGuesses}
-						playerGuesses={playerGuesses}
-						shipsDestroyed={shipsDestroyed}
-						shipsSunkByPlayer={shipsSunkByPlayer}
-						getShipsByType={this.getShipsByType}
-						isWinner={isWinner}
-					/> : <p>This game is currently in progress.</p>}
+			<div className="game">
+
+				<main className="game__main">
+					<header className="game__header">
+						<div className="game__header-inner">
+							<h1 className="game__header-title">{headerTitle}</h1>
+							<p className="game__header-description">{headerDescription}</p>
+						</div>
+					</header>
+					{!gameDisabled ? 
+						<BoardsContainer 
+							ships={ships}
+							busySquares={busySquares}
+							dispatch={dispatch}
+							socket={socket}
+							isWaitingForOpponent={isWaitingForOpponent}
+							params={params}
+							canMakeGuess={canMakeGuess}
+							noOpponent={noOpponent}
+							canDragShips={canDragShips}
+							opponentGuesses={opponentGuesses}
+							playerGuesses={playerGuesses}
+							shipsDestroyed={shipsDestroyed}
+							shipsSunkByPlayer={shipsSunkByPlayer}
+							getShipsByType={this.getShipsByType}
+							isWinner={isWinner}
+						/> : <p>This game is currently in progress.</p>}
+				</main>
+				<aside className="game__aside">
+					<div className="game__aside-inner">
+						Chatlog goes here!
+					</div>
+				</aside>
+
 			</div>
+
 		);
 	}
 }
