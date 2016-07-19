@@ -1,4 +1,53 @@
 import * as actions from '../constants/actionTypes';
+import {getHoursMinutes, prettify} from '../helpers';
+
+export function defineModal(title, description, isWinner) {
+	return {
+		type: actions.DEFINE_MODAL,
+		payload: {
+			title,
+			description,
+			isWinner
+		}
+	}
+}
+
+export function showModal() {
+	return {
+		type: actions.SHOW_MODAL
+	}
+}
+
+export function hideModal() {
+	return (dispatch) => {
+		dispatch({type: actions.HIDE_MODAL})
+		dispatch(resetModal())
+	}
+}
+
+export function resetModal() {
+	return {
+		type: actions.RESET_MODAL
+	}
+}
+
+export function addChatMessage(type, time, text) {
+	return {
+		type: actions.ADD_CHAT_MESSAGE,
+		payload: {
+			type,
+			time,
+			text
+		}
+	}
+}
+
+export function playerReady() {
+	return (dispatch) => {
+		dispatch({type: actions.PLAYER_READY})
+		dispatch(disableDragging())
+	}
+}
 
 export function setCreatingRoom(bool) {
 	return {
@@ -19,13 +68,16 @@ export function setWinnerStatus(bool) {
 }
 
 export function addSunkenShip(type, coordinates, orientation) {
-	return {
-		type: actions.ADD_SUNKEN_SHIP,
-		payload: {
-			type,
-			coordinates,
-			orientation
-		}
+	return (dispatch) => {
+		dispatch({
+			type: actions.ADD_SUNKEN_SHIP,
+			payload: {
+				type,
+				coordinates,
+				orientation
+			}
+		})
+		dispatch(addChatMessage('client', getHoursMinutes(), `You destroyed the opponent's ${prettify(type, true)}.`))
 	}
 }
 
@@ -81,20 +133,23 @@ export function canGuess(bool) {
 }
 
 export function opponentReady() {
-	return {
-		type: actions.OPPONENT_READY
+	return (dispatch) => {
+		dispatch({type: actions.OPPONENT_READY})
+		dispatch(addChatMessage('client', getHoursMinutes(), 'The opponent is now ready.'))
 	}
 }
 
 export function opponentArrived() {
-	return {
-		type: actions.OPPONENT_ARRIVED
+	return (dispatch) => {
+		dispatch({type: actions.OPPONENT_ARRIVED})
+		dispatch(addChatMessage('client', getHoursMinutes(), 'The opponent has connected.'))
 	}
 }
 
 export function opponentDeparted() {
-	return {
-		type: actions.OPPONENT_DEPARTED
+	return (dispatch) => {
+		dispatch({type: actions.OPPONENT_DEPARTED})
+		dispatch(addChatMessage('client', getHoursMinutes(), 'The opponent has disconnected.'))
 	}
 }
 

@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
 
-function ShipModule({x, y, onShipMouseDown, hit}) {
+function ShipModule({x, y, onShipMouseDown, isHit}) {
 	let className = 'ship__module';
-	if(hit) className += ' hit';
+	if(isHit) className += ' hit';
 	return (
 		<div className={className} onMouseDown={onShipMouseDown.bind(null, x, y)}>
 			<div className="board__square-dot dot--dark-gray"></div>
@@ -11,10 +11,10 @@ function ShipModule({x, y, onShipMouseDown, hit}) {
 }
 
 ShipModule.PropTypes = {
-	x: PropTypes.number.isRequired,
-	y: PropTypes.number.isRequired,
-	onShipMouseDown: PropTypes.func.isRequired,
-	hit: PropTypes.bool
+	x: PropTypes.number,
+	y: PropTypes.number,
+	onShipMouseDown: PropTypes.func,
+	isHit: PropTypes.bool
 }
 
 export default ShipModule;

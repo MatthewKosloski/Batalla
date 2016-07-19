@@ -37,6 +37,7 @@ class DraggableBoard extends Component {
 					canDragShips={canDragShips} 
 					getShipsByType={getShipsByType}
 					shipsDestroyed={shipsDestroyed}
+					opponentGuesses={opponentGuesses}
 				/>
 				<DropTargetSquaresContainer
 					busySquares={busySquares}

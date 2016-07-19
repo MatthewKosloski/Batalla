@@ -26,20 +26,130 @@
 }
 
 .game__aside-inner {
-	background-color: $desertStorm;
+	@include display(flex);
+	@include flex-direction(column);
 	@include breakpoint(lg) {
 		position: fixed;
 		right: 0;
 		width: 25%;
 		height: 100%;
 	}
+	background-color: $desertStorm;
+}
+
+.game__aside-messages {
+	list-style: none;
+	padding: em(25);
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+
+.game__aside-form {
+	background-color: $white;
+	margin-top: auto;
+	border-top: 1px solid #e0e0e0;
+}
+
+.game__aside-form-inner {
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+.game__aside-form-input {
+	width: 100%;
+	border: none;
+	padding: em(10);
+	font-size: rem(15);
+}
+
+.game__aside-message {
+	margin-bottom: em(25);
+}
+
+.game__aside-message-inner {
+	span,
+	p {
+		margin: 0;
+	}
+	span {
+		font-weight: 700;
+		font-size: rem(12);
+	}
+}
+
+.message--bubble {
+	width: 75%;
+	.game__aside-message-inner {
+		font-size: rem(16);
+		padding: 8px 10px;
+		color: $white;
+			&::before {
+				content: "";
+				position: absolute;
+				z-index: -1;
+				bottom: 0;
+				width: 0.75em;
+				height: 1em;
+			}
+			&::after {
+				content: "";
+				position: absolute;
+				z-index: -1;
+				bottom: 0.3em;
+				width: 1.5em;
+				height: 1em;
+				background: $desertStorm;
+			}
+	}
+}
+
+.message--opponent {
+	@include align-self(flex-start);
+	.game__aside-message-inner {
+		background-color: $blackMarlin;
+		border-radius: 15px 15px 15px 0;
+		  &::before {
+		    left: -0.75em;
+		    background: $blackMarlin;
+		    border-radius: 1.25em 0 0 1.25em;
+		  }
+		  &::after {
+		    left: -1.3em;
+		    border-radius: 0 0 1.25em 0;
+		    transform: rotate(-20deg);
+		  }
+	}
+}
+
+.message--player {
+	@include align-self(flex-end);
+	.game__aside-message-inner {
+		background-color: $darkBlue;
+		border-radius: 15px 15px 0 15px;
+		&::before {
+		    right: -0.75em;
+		    background: $darkBlue;
+		    border-radius: 0 1.25em 1.25em 0;
+		}
+		&::after {
+		    right: -1.3em;
+		    border-radius: 0 0 0 1.25em;
+		    transform: rotate(20deg);
+		}
+	}
+}
+
+.message--client {
+	@include align-self(center);
+	text-align: center;
+	font-size: rem(15);
+	color: $lightGray;
 }
 
 .game__header {
-	padding: 75px 0;
-}
-
-.game__boards {
+	padding: 50px 0;
 }
 
 .game__header-inner {

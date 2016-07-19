@@ -5,7 +5,6 @@ var RECEIVE_GAME_ID = socketEvents.RECEIVE_GAME_ID,
 	REQUEST_GAME_ID = socketEvents.REQUEST_GAME_ID,
 	DISABLE_GAME = socketEvents.DISABLE_GAME,
 	JOIN_GAME = socketEvents.JOIN_GAME,
-	MESSAGE_FROM_SERVER = socketEvents.MESSAGE_FROM_SERVER,
 	OPPONENT_LEFT = socketEvents.OPPONENT_LEFT,
 	ALL_CLIENTS_CONNECTED = socketEvents.ALL_CLIENTS_CONNECTED,
 	PLAYER_READY = socketEvents.PLAYER_READY,
@@ -15,25 +14,32 @@ var RECEIVE_GAME_ID = socketEvents.RECEIVE_GAME_ID,
 	RECEIVE_GUESS = socketEvents.RECEIVE_GUESS,
 	SEND_GUESS_FEEDBACK = socketEvents.SEND_GUESS_FEEDBACK,
 	RECEIVE_GUESS_FEEDBACK = socketEvents.RECEIVE_GUESS_FEEDBACK,
-	SEND_DESTROYED_SHIPS = socketEvents.SEND_DESTROYED_SHIPS,
 	OPPONENT_SHIP_DESTROYED = socketEvents.OPPONENT_SHIP_DESTROYED,
 	RECEIVE_DESTROYED_SHIP = socketEvents.RECEIVE_DESTROYED_SHIP,
 	OPPONENT_HAS_WON = socketEvents.OPPONENT_HAS_WON,
 	PLAYER_HAS_WON = socketEvents.PLAYER_HAS_WON,
-	CONNECTION = 'connection',
-	DISCONNECT = 'disconnect';
+	SEND_MESSAGE = socketEvents.SEND_MESSAGE,
+	RECEIVE_MESSAGE = socketEvents.RECEIVE_MESSAGE;
 
 module.exports = function(io){
-	io.on(CONNECTION, function (socket) {
+	io.on('connection', function (socket) {
 	
 		socket.on(REQUEST_GAME_ID, handleRequestGameId);
 		socket.on(JOIN_GAME, handleJoinGame);
 		socket.on(PLAYER_READY, handlePlayerReady);
 		socket.on(SEND_GUESS, handleSendGuess);
 		socket.on(SEND_GUESS_FEEDBACK, handleSendGuessFeedback);
-		socket.on(SEND_DESTROYED_SHIPS, handleSendDestroyedShips);
 		socket.on(OPPONENT_SHIP_DESTROYED, handleOpponentShipDestroyed);
 		socket.on(OPPONENT_HAS_WON, handleOpponentWinning);
+		socket.on(SEND_MESSAGE, handleReceivedMessage);
+
+		function handleReceivedMessage(message) {
+			socket.broadcast.to(message.gameId).emit(RECEIVE_MESSAGE, {
+				type: message.type,
+				time: message.time,
+				text: message.text
+			});
+		}
 
 		function handleOpponentWinning(gameId) {
 			socket.broadcast.to(gameId).emit(PLAYER_HAS_WON);
@@ -41,14 +47,10 @@ module.exports = function(io){
 
 		function handleOpponentShipDestroyed(data) {
 			socket.broadcast.to(data.gameId).emit(RECEIVE_DESTROYED_SHIP, {
-				type: data.destroyedShipType,
+				type: data.destroyedShipType[0],
 				coordinates: data.coordinates,
 				orientation: data.orientation
 			});
-		}
-
-		function handleSendDestroyedShips(payload) {
-			console.log(payload);
 		}
 
 		function handleSendGuessFeedback(payload) {
@@ -84,7 +86,7 @@ module.exports = function(io){
 			if(gameHasOnePlayer) {
 				io.in(gameId).emit(ALL_CLIENTS_CONNECTED);
 			}
-			socket.on(DISCONNECT, function(){
+			socket.on('disconnect', function(){
 				socket.broadcast.to(gameId).emit(OPPONENT_LEFT);
 			});
 		}

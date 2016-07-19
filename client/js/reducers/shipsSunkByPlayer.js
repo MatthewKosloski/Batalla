@@ -22,7 +22,7 @@ const shipsSunkByPlayer = (state = [], action) => {
 			return [
 				...state,
 				{
-					type,
+					type: type[0],
 					coordinates,
 					orientation
 				}

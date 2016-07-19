@@ -6,7 +6,6 @@ import configureStore, {history} from './store/configureStore';
 import AppContainer from './containers/AppContainer';
 import HomeContainer from './containers/HomeContainer';
 import GameContainer from './containers/GameContainer';
-import BoardsDesignContainer from './containers/BoardsDesignContainer';
 
 const store = configureStore();
 
@@ -16,7 +15,6 @@ const router = (
 			<Route path="/" component={AppContainer}>
 				<IndexRoute component={HomeContainer}></IndexRoute>
 				<Route path="/g/:gameId" component={GameContainer}></Route>
-				<Route path="/boards" component={BoardsDesignContainer}></Route>
 			</Route>
 		</Router>
 	</Provider>

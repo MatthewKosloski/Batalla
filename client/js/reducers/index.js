@@ -14,6 +14,9 @@ import shipsDestroyed from './shipsDestroyed';
 import shipsSunkByPlayer from './shipsSunkByPlayer';
 import isWinner from './isWinner';
 import isCreatingRoom from './isCreatingRoom';
+import isReady from './isReady';
+import messages from './messages';
+import modal from './modal';
 
 const rootReducer = combineReducers({
 	routing: routerReducer,
@@ -29,7 +32,10 @@ const rootReducer = combineReducers({
 	shipsDestroyed,
 	shipsSunkByPlayer,
 	isWinner,
-	isCreatingRoom
+	isCreatingRoom,
+	isReady,
+	messages,
+	modal
 });
 
 export default rootReducer;

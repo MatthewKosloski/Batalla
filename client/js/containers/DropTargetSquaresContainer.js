@@ -19,7 +19,7 @@ class DropTargetSquaresContainer extends Component {
 		const y = Math.floor(i / 10);
 		const isBusy = haveSamePair([[x, y]], busySquares);
 		const isGuessed = haveSamePair([[x, y]], opponentGuesses);
-		const isHit = isBusy && isGuessed ? true : false;
+		const isHit = isBusy && isGuessed;
 		return (
 			<DropTargetSquare 
 				key={i} 

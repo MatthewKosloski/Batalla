@@ -1,3 +1,24 @@
+export const numberToWords = (n) => {
+	let arr = ['zero', 'one', 'two', 'three', 'four', 'five'];
+	return arr[n];
+}
+
+export const prettify = (str, capitalize) => {
+	if(capitalize) {
+		let result = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+		return result.replace('_', ' ');
+	} else {
+		return str.replace('_', ' ');
+	}
+}
+
+export const twoDigitString = (n) => n > 9 ? n.toString() : ('0' + n).toString();
+
+export const getHoursMinutes = () => {
+	const d = new Date();
+	return `${twoDigitString(d.getHours())}:${twoDigitString(d.getMinutes())}`;
+}
+
 export const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 export const haveSamePair = (arr1, arr2) => {

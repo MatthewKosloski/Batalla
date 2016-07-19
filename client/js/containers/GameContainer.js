@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import GameHeader from '../components/GameHeader';
+import ModalContainer from './ModalContainer';
 import BoardsContainer from './BoardsContainer';
+import ChatContainer from './ChatContainer';
 
 import {
 	opponentArrived, 
@@ -12,7 +15,6 @@ import {
 import {
 	JOIN_GAME, 
 	DISABLE_GAME, 
-	MESSAGE_FROM_SERVER, 
 	OPPONENT_LEFT,
 	ALL_CLIENTS_CONNECTED,
 	CAN_GUESS
@@ -32,7 +34,6 @@ class GameContainer extends Component {
 	componentDidMount() {
 		const {socket, params} = this.props;
 		socket.emit(JOIN_GAME, params.gameId);
-		socket.on(MESSAGE_FROM_SERVER, this.displayMessage);
 		socket.on(DISABLE_GAME, this.handleDisableGame);
 		socket.on(ALL_CLIENTS_CONNECTED, this.handleOpponentArrival);
 		socket.on(OPPONENT_LEFT, this.handleOpponentDeparture);
@@ -57,16 +58,11 @@ class GameContainer extends Component {
 	handleOpponentDeparture() {
 		const {dispatch} = this.props;
 		dispatch(opponentDeparted());
-		console.log('OPPONENT_LEFT');
 	}
 
 	handleDisableGame() {
 		const {dispatch} = this.props;
 		dispatch(disableGame());
-	}
-
-	displayMessage(data) {
-		console.log(data);
 	}
 
 	render() {
@@ -85,38 +81,27 @@ class GameContainer extends Component {
 			playerGuesses,
 			shipsDestroyed,
 			shipsSunkByPlayer,
-			isWinner
+			isWinner,
+			isReady,
+			messages,
+			modal
 		} = this.props;
 
-		let headerTitle, headerDescription;
-		const isWinning = shipsSunkByPlayer.length > shipsDestroyed.length;
-		const isTie = shipsSunkByPlayer.length === shipsDestroyed.length
-
-			if(noOpponent) {
-				headerTitle = 'Opponent not connected';
-				headerDescription = 'share the url with a friend to play';
-			} else if(!noOpponent) {
-				headerTitle = 'Opponent is not ready';
-				headerDescription = 'the opponent is placing his ships';
-			} else if(canMakeGuess) {
-				headerTitle = 'Your turn';
-				headerDescription = isWinning ? 'you\'re winning' : isTie ? 'good luck' : 'you\'re losing';
-			} else if(!canMakeGuess) {
-				headerTitle = 'Opponent\'s Turn';
-				headerDescription = isWinning ? 'you\'re winning' : isTie ? 'good luck' : 'you\'re losing';
-			}
-
 		return(
-			<div className="game">
-
-				<main className="game__main">
-					<header className="game__header">
-						<div className="game__header-inner">
-							<h1 className="game__header-title">{headerTitle}</h1>
-							<p className="game__header-description">{headerDescription}</p>
-						</div>
-					</header>
-					{!gameDisabled ? 
+			<div>
+				<ModalContainer 
+					modal={modal} 
+				/>
+				<div className="game">
+					<main className="game__main">
+						<GameHeader 
+							isReady={isReady}
+							noOpponent={noOpponent}
+							isWaitingForOpponent={isWaitingForOpponent}
+							canMakeGuess={canMakeGuess}
+							isWinning={shipsSunkByPlayer.length > shipsDestroyed.length}
+							isTie={shipsSunkByPlayer.length === shipsDestroyed.length}
+						/>
 						<BoardsContainer 
 							ships={ships}
 							busySquares={busySquares}
@@ -133,16 +118,21 @@ class GameContainer extends Component {
 							shipsSunkByPlayer={shipsSunkByPlayer}
 							getShipsByType={this.getShipsByType}
 							isWinner={isWinner}
-						/> : <p>This game is currently in progress.</p>}
-				</main>
-				<aside className="game__aside">
-					<div className="game__aside-inner">
-						Chatlog goes here!
-					</div>
-				</aside>
+							isReady={isReady}
+						/>
+					</main>
+					<aside className="game__aside">
+						<ChatContainer 
+							socket={socket}
+							dispatch={dispatch}
+							messages={messages}
+							gameId={params.gameId}
+							canChat={!noOpponent}
+						/>
+					</aside>
 
+				</div>
 			</div>
-
 		);
 	}
 }
@@ -160,7 +150,10 @@ function mapStateToProps(state) {
 		playerGuesses,
 		shipsDestroyed,
 		shipsSunkByPlayer,
-		isWinner
+		isWinner,
+		isReady,
+		messages,
+		modal
 	} = state;
 	return {
 		ships,
@@ -174,7 +167,10 @@ function mapStateToProps(state) {
 		playerGuesses,
 		shipsDestroyed,
 		shipsSunkByPlayer,
-		isWinner
+		isWinner,
+		isReady,
+		messages,
+		modal
 	}
 }
 

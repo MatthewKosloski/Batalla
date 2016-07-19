@@ -4,10 +4,26 @@ import {calculateShipStyle} from '../helpers';
 class OpponentShipsContainer extends Component {
 
 	renderShip(ship, index) {
-		const {coordinates, orientation} = ship;
+		const {coordinates, orientation, type} = ship;
 		const isHorizontal = orientation === 'horizontal';
 		const style = calculateShipStyle(isHorizontal, coordinates);
-		return <div key={index} className="board__ship opponent-ship" style={style}></div>;
+
+		let className = `board__ship opponent-ship ${type.toLowerCase()} ${orientation}`;
+
+		let shipModules = [];
+		for(let i = 0; i < coordinates.length; i++) {
+			shipModules.push(
+				<div key={i} className="ship__module hit">
+					<div className="board__square-dot"></div>
+				</div>
+			)
+		}
+
+		return (
+			<div key={index} className={className} style={style}>
+				{shipModules}
+			</div>
+		);
 	}
 
 	render() {

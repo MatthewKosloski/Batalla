@@ -17,7 +17,7 @@ class ShipsContainer extends Component {
 	}
 
 	renderShip(ship, index) {
-		const {dispatch, busySquares, canDragShips, getShipsByType, shipsDestroyed} = this.props;
+		const {dispatch, busySquares, canDragShips, getShipsByType, shipsDestroyed, opponentGuesses} = this.props;
 		const {type, coordinates, orientation} = ship;
 		const {length} = coordinates;
 		const isHorizontal = orientation === 'horizontal';
@@ -30,6 +30,7 @@ class ShipsContainer extends Component {
 				onShipClick={this.handleShipClick.bind(this, type, isHorizontal, coordinates)} 
 				onShipMouseDown={this.handleShipMouseDown.bind(this, type)}
 				busySquares={busySquares} 
+				opponentGuesses={opponentGuesses}
 				getShipsByType={getShipsByType}
 				canDragShips={canDragShips}
 				shipsDestroyed={shipsDestroyed}

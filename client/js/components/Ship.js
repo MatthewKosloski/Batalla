@@ -52,10 +52,19 @@ class Ship extends Component {
 	}
 
 	renderModules(coordinates, index) {
-		const {onShipMouseDown} = this.props;
+		const {onShipMouseDown, busySquares, opponentGuesses} = this.props;
 		const [x, y] = coordinates;
+		const isBusy = haveSamePair([[x, y]], busySquares);
+		const isGuessed = haveSamePair([[x, y]], opponentGuesses);
+		const isHit = isBusy && isGuessed;
 		return(
-			<ShipModule key={index} x={x} y={y} onShipMouseDown={onShipMouseDown}/>
+			<ShipModule 
+				key={index} 
+				x={x} 
+				y={y}
+				isHit={isHit} 
+				onShipMouseDown={onShipMouseDown}
+			/>
 		);
 	}
 

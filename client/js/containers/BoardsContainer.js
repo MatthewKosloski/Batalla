@@ -2,23 +2,29 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import ClickableBoard from '../components/ClickableBoard';
 import DraggableBoard from '../components/DraggableBoard';
+import GameControls from '../components/GameControls';
 import shipsSchema from '../data/shipsSchema';
 
 import {
 	getIndexOfArray, 
 	haveSamePair, 
-	generateCoordinatesForShips
+	generateCoordinatesForShips,
+	getHoursMinutes,
+	prettify,
+	numberToWords
 } from '../helpers';
 
 import {
-	disableDragging,
+	playerReady,
 	opponentReady,
 	canGuess,
 	addOpponentGuess,
 	addPlayerGuess,
 	addSunkenShip,
 	setWinnerStatus,
-	changeOrientation
+	changeOrientation,
+	addChatMessage,
+	defineModal
 } from '../actions';
 
 import {
@@ -63,19 +69,13 @@ class BoardsContainer extends Component {
 		if(oldShipsDestroyed.length !== nextShipsDestroyed.length) {
 			const destroyedShipType = nextShipsDestroyed.filter((x) => oldShipsDestroyed.indexOf(x) === -1);
 			const destroyedShip = getShipsByType(destroyedShipType)[0];
-			console.log(destroyedShipType, destroyedShip);
-			const {coordinates, orientation} = destroyedShip;
+			const {coordinates, orientation, type} = destroyedShip;
 			const {gameId} = params;
-			console.log(`Your ${destroyedShipType} has been destroyed.`, coordinates);
-			socket.emit(OPPONENT_SHIP_DESTROYED, {
-				destroyedShipType,
-				coordinates,
-				orientation, 
-				gameId
-			});
+			dispatch(addChatMessage('client', getHoursMinutes(), `Your ${prettify(type, true)} has been destroyed.`));
+			socket.emit(OPPONENT_SHIP_DESTROYED, {destroyedShipType, coordinates, orientation, gameId});
 			if(ships.length && nextShipsDestroyed.length === ships.length) {
 				const {gameId} = params;
-				console.log('You lost!');
+				dispatch(defineModal('You lost!', 'The opponent sank all five of your lousy ships. You get a ribbon for trying.', false));
 				dispatch(setWinnerStatus(false));
 				socket.emit(OPPONENT_HAS_WON, gameId);
 			}
@@ -102,15 +102,15 @@ class BoardsContainer extends Component {
 	}
 
 	handlePlayerHasWon() {
-		const {dispatch} = this.props;
+		const {dispatch, shipsDestroyed} = this.props;
 		dispatch(setWinnerStatus(true));
-		console.log('You won!');
+		const description = shipsDestroyed.length ? `You defeated your opponent and only lost ${numberToWords(shipsDestroyed.length)} ${shipsDestroyed.length > 1 ? 'ships' : 'ship'} in the process.` : 'You defeated your opponent and lost none of your ships!';
+		dispatch(defineModal('You won!', description, true));
 	}
 
 	handleReceiveDestroyedShip(data) {
 		const {dispatch} = this.props;
 		const {type, coordinates, orientation} = data;
-		console.log(`You destroyed the ${type} at`, coordinates);
 		dispatch(addSunkenShip(type, coordinates, orientation));
 	}
 
@@ -143,7 +143,7 @@ class BoardsContainer extends Component {
 
 	handlePlayerReady() {
 		const {dispatch, socket, params} = this.props;
-		dispatch(disableDragging());
+		dispatch(playerReady());
 		socket.emit(PLAYER_READY, params.gameId);
 	}
 
@@ -180,7 +180,8 @@ class BoardsContainer extends Component {
 			noOpponent,
 			shipsSunkByPlayer,
 			getShipsByType,
-			shipsDestroyed
+			shipsDestroyed,
+			isReady
 		} = this.props;
 		return (
 			<div className="game__boards">
@@ -195,12 +196,16 @@ class BoardsContainer extends Component {
 						getShipsByType={getShipsByType}
 						shipsDestroyed={shipsDestroyed}
 					/>
-					<button onClick={this.handleShuffleShips}>Shuffle</button>
-					<button onClick={this.handlePlayerReady} disabled={!canDragShips||noOpponent}>Ready</button>
 					</div>
 				</div>
 				<div className="game__board board--opponent">
 					<div className="game__board-inner">
+						<GameControls
+							isReady={isReady} 
+							canReadyUp={!canDragShips||noOpponent}
+							onShuffleClick={this.handleShuffleShips}
+							onReadyClick={this.handlePlayerReady}
+						/>
 						<ClickableBoard 
 							shipsSunkByPlayer={shipsSunkByPlayer}
 							playerGuesses={playerGuesses}
@@ -228,7 +233,8 @@ BoardsContainer.propTypes = {
 	playerGuesses: PropTypes.array.isRequired,
 	shipsDestroyed: PropTypes.array.isRequired,
 	shipsSunkByPlayer: PropTypes.arrayOf(PropTypes.object).isRequired,
-	getShipsByType: PropTypes.func.isRequired
+	getShipsByType: PropTypes.func.isRequired,
+	isReady: PropTypes.bool.isRequired
 }
 
 export default BoardsContainer;

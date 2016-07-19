@@ -6,14 +6,45 @@
     font-weight: 700;
     padding: 10px 25px;
     border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .btn--dark-blue {
 	border: none;
 	background-color: $darkBlue;
-	box-shadow: 0px 3px 0px $darkBlueShadow;
+	color: $white;
+	box-shadow: 0 3px 0 $darkBlueShadow;
 	&:active {
 		box-shadow: none;
 		top: 3px;
 	}
 }
+
+.btn:disabled {
+    background-color: $lightGray;
+    box-shadow: 0 3px 0 $lightGrayShadow;
+    cursor: no-drop;
+    color: $lightGrayShadow;
+}
+
+.btn--large {
+	font-size: rem(16);
+	padding: 15px 40px;
+	border-radius: 5px;
+}
+
+.btn--flash-dark-blue {
+	@include animation(flashDarkBlue 0.67s linear infinite alternate);
+}
+
+@include keyframes(flashDarkBlue) {
+	from {
+		background-color: $darkBlue;
+		box-shadow: 0 3px 0 $darkBlueShadow;
+	}
+	to {
+		background-color: darken($darkBlue, 10%);
+		box-shadow: 0 3px 0 darken($darkBlueShadow, 10%);
+	}
+} 
