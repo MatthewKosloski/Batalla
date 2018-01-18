@@ -1,6 +1,9 @@
 # Batalla
 
-A battleship game built with React and Socketio.  Commit messages are less than useful and are subpar in nature.  Although this is a bad practice, I believe exceptions can be made for this project.  I'm the only one working on the repo, and I merely need a place to put my code.
+A battleship game built with React and Socketio.
+
+## Demo
+[![Batalla](http://img.youtube.com/vi/HKysOyaomWo/0.jpg)](http://www.youtube.com/watch?v=HKysOyaomWo)
 
 ## Setup
 
